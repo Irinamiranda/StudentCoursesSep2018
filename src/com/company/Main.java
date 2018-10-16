@@ -1,8 +1,5 @@
 package com.company;
 
-import com.sun.xml.internal.ws.api.pipe.ServerTubeAssemblerContext;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -108,10 +105,13 @@ public class Main {
                     break;
                 case 5:
                     System.out.println("List teachers");
+                    for (Teacher teacher : allTeachers) {
+                        System.out.printf("ID Number:%s\nFirst Name:%s\nLast Name:%s\nE-mail Address:%s\n", teacher.getIdNumber(), teacher.getFirstName(), teacher.getLastName(), teacher.getEmail());
+                    }
                     break;
                 case 6:
                     System.out.println("List courses");
-                    listCourses(allCourses,allStudents,allTeachers);
+                    listCourses(allCourses);
 
                     break;
 
@@ -187,30 +187,23 @@ public class Main {
 
     }
 
-    public static void  listCourses(ArrayList <Course> allCourses, ArrayList<Student> allStudents, ArrayList<Teacher> allTeachers){
+    public static void  listCourses(ArrayList<Course> allCourses){
 
             for(Course eachCourse: allCourses)
             {
                 System.out.printf("Course name: %s\n",eachCourse.getCourseName());
 
                 System.out.println("Taught by");
-                for (Teacher eachTeacher : allTeachers)
+                for (Teacher eachTeacher : eachCourse.getTeachersForThisCourse())
                 {
-                    if(eachTeacher.getCoursesTaught().contains(eachCourse))
-                    {
-                        System.out.println(eachTeacher.getFirstName()+" "+eachTeacher.getLastName());
-                    }
-
+                    System.out.println(eachTeacher.getFirstName()+" "+eachTeacher.getLastName());
                 }
                 System.out.println();
 
                 System.out.println("Taken by:");
-                for (Student eachStudent:allStudents)
+                for (Student eachStudent:eachCourse.getStudentsTakingThisCourse())
                 {
-                    if(eachStudent.getCoursesTaken().contains(eachCourse))
-                    {
-                        System.out.println(eachStudent.getFirstName()+" "+eachStudent.getLastName());
-                    }
+                    System.out.println(eachStudent.getFirstName()+" "+eachStudent.getLastName());
                 }
             }
     }
@@ -220,6 +213,7 @@ public class Main {
         addStudentTeacher = keyboard.nextLine();
         if (!addStudentTeacher.equalsIgnoreCase("student") && !addStudentTeacher.equalsIgnoreCase("teacher") && !addStudentTeacher.equalsIgnoreCase("none")) {
             System.out.println("Enter a valid option!!");
+            return "none";
         }
 
         if (!addStudentTeacher.equalsIgnoreCase("none")) {
@@ -228,9 +222,11 @@ public class Main {
             if (addStudentTeacher.equalsIgnoreCase("student")) {
                 Student foundStudent = findStudent(teacherStudentID, allStudents);
                 foundStudent.addACourse(theNewCourse);
+                theNewCourse.getStudentsTakingThisCourse().add(foundStudent);
             } else {
                 Teacher foundTeacher = findTeacher(teacherStudentID, allTeachers);
                 foundTeacher.addACourse(theNewCourse);
+                theNewCourse.getTeachersForThisCourse().add(foundTeacher);
             }
 
         }

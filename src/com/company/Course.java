@@ -7,10 +7,17 @@ public class Course {
     private String idNumber;
     private String courseName;
 
-    private List<Student> studentsTakingThisCourse;
+    private List<Student> studentsTakingThisCourse = new ArrayList<>();
 
-    private List<Student> teachersForThisCourse;
+    private List<Teacher> teachersForThisCourse = new ArrayList<>();
 
+    public List<Student> getStudentsTakingThisCourse() {
+        return studentsTakingThisCourse;
+    }
+
+    public List<Teacher> getTeachersForThisCourse() {
+        return teachersForThisCourse;
+    }
 
     public Course() {
     }
